@@ -2,4 +2,5 @@
 #include <string>
 using namespace std;
 
-vector<string> split(string toSplit, string delimeter);
+vector<char> split(string toSplit, string delimeter);
+vector<string> splitStr(string toSplit, string delimeter);
