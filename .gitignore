@@ -1,3 +1,4 @@
 *.o
 *.gch
 /src/.vs
+src/driver
