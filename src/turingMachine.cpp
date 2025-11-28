@@ -15,8 +15,9 @@ TuringMachine::TuringMachine(string filename) {
 	try {
 		for (int lineNo = 0; true; lineNo++) {
 			string line;
-			cout << line << endl;
 			if (!getline(file, line)) break;
+			if (line.back() == '\r') line = line.substr(0, line.size() - 1);
+			cout << line << endl;
 			switch (lineNo) {
 			case 0: // Get the language alphabet
 				this->LanguageAlphabet = split(line, " ");
@@ -44,7 +45,10 @@ TuringMachine::TuringMachine(string filename) {
 			{
 				vector<string> names = splitStr(line, " ");
 				for (size_t i = 0; i < names.size(); i++) {
-					this->states[names[i]]->SetAccepting(true);
+					string key = names[i];
+					State* s = this->states[key];
+					if (s != nullptr) s->SetAccepting(true);
+					else throw 4;
 				}
 			}
 				/*
@@ -55,6 +59,7 @@ TuringMachine::TuringMachine(string filename) {
 				done = true;
 				break;
 			default: // Implement each transition.
+				if (line.length() == 0) break;
 				// The format for a transition will be:
 				// [FROM_STATE] [CONSUMED]/[REPLACED], [DIRECTION] [TO_STATE]
 			{
@@ -78,12 +83,12 @@ TuringMachine::TuringMachine(string filename) {
 				if (moreData[0] == (string)"lambda") consume = nullptr;
 				else {
 					consume = new char;
-					*consume = moreData[0][0];
+					*consume = moreData[0].front();
 				}
 				if (moreData[1] == (string)"lambda,") replace = nullptr;
 				else {
 					replace = new char;
-					*replace = moreData[1][0];
+					*replace = moreData[1].front();
 				}
 				// Create Transition, add it to from state
 				Transition* T = new Transition(consume, replace, right, to);
@@ -104,7 +109,13 @@ TuringMachine::TuringMachine(string filename) {
 	file.close();
 
 };
+TuringMachine::~TuringMachine() {
+	for (auto itr = this->states.begin(); itr != this->states.end(); itr++) {
+		delete itr->second;
+	}
+}
 
 bool TuringMachine::Accept(string input, string* output, long long maxSteps) const {
+	printf("Testing Acceptance Not Implemented!")
 	throw 1;
 }

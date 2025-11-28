@@ -2,3 +2,8 @@
 X Y
 TestA TestB TestC
 TestC
+TestA 0/1, r TestB
+TestA 1/0, r TestB
+TestB 0/1, l TestA
+TestB 1/1, l TestC
+TestB lambda/0, l TestC

@@ -5,7 +5,6 @@ class Transition;
 
 #include <string>
 #include <map>
-#include <vector>
 #include "transition.hpp"
 using namespace std;
 
@@ -18,8 +17,8 @@ public:
 	bool IsAccepting() const;
 	void SetAccepting(bool set);
 private:
-	map<char, vector<Transition*>*> transitions;
-	vector<Transition*> lambdaTransitions;
+	map<char, Transition*> transitions;
+	Transition* lambdaTransition;
 	string name;
 	bool _isAccept;
 };
