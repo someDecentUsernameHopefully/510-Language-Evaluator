@@ -1,4 +1,5 @@
 #include <vector>
+#include <map>
 #include <string>
 #include "state.hpp"
 using namespace std;
@@ -21,7 +22,7 @@ public:
 private:
 	vector<char> LanguageAlphabet;
 	vector<char> AuxAlphabet;
-	vector<State> states;
+	map<string, State*> states;
 };
 
 #endif // !AUTOMATA_H

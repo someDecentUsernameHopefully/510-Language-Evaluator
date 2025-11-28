@@ -2,8 +2,8 @@ APPLICATION_NAME=driver
 CC=g++
 CFLAGS=$(CC) -c -Wall -g
 
-all: main.o lib.o turingMachine.o tape.o state.o
-	$(CC) -o $(APPLICATION_NAME) main.o lib.o turingMachine.o tape.o state.o
+all: main.o lib.o turingMachine.o tape.o state.o transition.o
+	$(CC) -o $(APPLICATION_NAME) main.o lib.o turingMachine.o tape.o state.o transition.o
 
 main.o: main.cpp
 	$(CFLAGS) main.cpp
@@ -19,6 +19,9 @@ tape.o: tape.cpp tape.hpp
 
 state.o: state.cpp state.hpp
 	$(CFLAGS) state.cpp state.hpp
+
+transition.o: transition.cpp transition.hpp
+	$(CFLAGS) transition.cpp transition.hpp
 
 clean:
 	rm -f *.o
