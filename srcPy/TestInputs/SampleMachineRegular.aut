@@ -1,0 +1,12 @@
+REG
+0 1
+Start LastOne LastZero LastTwoZero
+LastOne LastTwoZero
+Start 1 LastOne
+Start 0 LastZero
+LastOne 1 LastOne
+LastOne 0 LastZero
+LastZero 1 LastOne
+LastZero 0 LastTwoZero
+LastTwoZero 0 LastTwoZero
+LastTwoZero 1 LastOne
