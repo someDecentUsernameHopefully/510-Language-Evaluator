@@ -10,7 +10,7 @@ class Tape:
         self.left = None
         self.right = None
         # Base case: string is empty or None
-        if(string is None or len(string) > 0):
+        if(string is None or len(string) == 0):
             self.char = None
         # Recursive case: create another tape and attach it to itself
         else:
@@ -27,6 +27,7 @@ class Tape:
             self.right.left = None
             del self.right
     def __str__(self):
+        #return self.char if self.char is not None else "None"
         # Find the leftmost position on the tape
         t = self
         while(t.left is not None):
@@ -42,21 +43,22 @@ class Tape:
         Progresses the tape to the next position
         Returns: The next tape's position
     """
-    def Progress(self, consumed, overwrite, dir):
+    def Progress(self, consumed, overwrite, _dir):
         # Check that the correct character is being consumed
         if(self.char != consumed):
             raise RuntimeError("Attempted to consume incorrect character on Tape!")
         # Overwrite the character
         self.char = overwrite
         # Get the appropriate part of the tape to return, expanding the tape if necessary
-        if (dir == LEFT):
+        if (_dir == LEFT):
             if(self.left is None):
                 self.left = Tape()
                 self.left.right = self
             return self.left
-        elif (dir == RIGHT):
+        elif (_dir == RIGHT):
             if(self.right is None):
                 self.right = Tape()
+                self.right.left = self
             return self.right
         else:
-            raise ValueError(f"{dir} is not LEFT or RIGHT!")
+            raise ValueError(f"{_dir} is not LEFT or RIGHT!")

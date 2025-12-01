@@ -34,6 +34,8 @@ def main():
             automata = PDA(argv[1])
         case "TUR":
             automata = TuringMachine(argv[1])
+    #print("The machine has been formed. It is:")
+    #print(str(automata))
     # Get the file of test strings
     testStrings = None
     try:

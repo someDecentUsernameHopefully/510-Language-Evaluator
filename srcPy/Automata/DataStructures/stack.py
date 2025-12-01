@@ -3,7 +3,9 @@ class Stack:
     def __init__(self):
         self.array = []
     def IsEmpty(self):
-        return len(self.array) == 0
+        return self.Size() == 0
+    def Size(self):
+        return len(self.array)
     def Push(self, entry):
         self.array.append(entry)
     def Peek(self):

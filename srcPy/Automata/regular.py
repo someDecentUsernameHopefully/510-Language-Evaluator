@@ -13,25 +13,11 @@ class RegularAutomata(Automata):
                     # This is just the type of automata. We already know this.
                     pass
                 case 1:
-                    # Get the space-separated language alphabet
-                    self.alphabet = line.split(" ")
+                    self._setupAlphabet(line)
                 case 2:
-                    self.states = {}
-                    self.start = None
-                    # Get the space-separated list of state names
-                    for name in line.split(" "):
-                        # Generate the state, add it to the list
-                        # The first state listed is the start state
-                        S = State(name)
-                        self.states[name] = S
-                        if self.start is None:
-                            self.start = S
-                    if(len(self.states) == 0):
-                        raise RuntimeError("Automata must have at least one state!")
+                    self._setupStates(line)
                 case 3:
-                    # Get the list of accepting states
-                    for name in line.split(" "):
-                        self.states[name].accepting = True
+                    self._setAccepting(line)
                 case _:
                     # Define each transition
                     # The format for a transition for regular automata is:
@@ -45,6 +31,8 @@ class RegularAutomata(Automata):
         if(tracker < 3):
             raise RuntimeError("States must be defined!")
     def Accept(self, _input):
+        if not self.InputInAlpha(_input):
+            return False
         currentState = self.start
         while(len(_input) > 0):
             if _input[0] not in currentState.transitions:
@@ -52,3 +40,8 @@ class RegularAutomata(Automata):
             currentState = currentState.transitions[_input[0]].to
             _input = _input[1:]
         return currentState.accepting
+    def __str__(self):
+        toReturn = f"REGULAR MACHINE\n{self.alphabet}\n"
+        for state in self.states.values():
+            toReturn += str(state)
+        return toReturn
