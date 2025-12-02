@@ -46,12 +46,11 @@ def main():
     for line in testStrings:
         line = line.strip("\n")
         output = automata.Accept(line)
-        if(output is None or output is False):
-            print(f"{line} is not recognized by the automata.")
-        elif(isinstance(automata, TuringMachine)):
-            print(f"{line} is recognized by the automata. The output is {output}")
+        if(output[0]):
+            print(f"{line} is recognized by the automata. {"The output is: " + output[2] if output[2] is not None else ""}")
+            print(output[1], end="")
         else:
-            print(f"{line} is recognized by the automata.")
+            print(f"{line} is not recognized by the automata.")
     testStrings.close()
 
 main()

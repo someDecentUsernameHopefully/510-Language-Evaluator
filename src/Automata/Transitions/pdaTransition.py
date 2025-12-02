@@ -7,8 +7,9 @@ class PDATransition(Transition):
         self.stackTop = stackTop
         self.stackAppend = stackAppend
     def ApplyStack(self, stack):
-        if self.stackTop is None or (not stack.IsEmpty() and stack.Pop() == self.stackTop):
-            # The top of the stack was removed in the check above
+        if self.stackTop is None or (not stack.IsEmpty() and stack.Peek() == self.stackTop):
+            if self.stackTop is not None:
+                stack.Pop()
             for char in self.stackAppend:
                 stack.Push(char)
         else:

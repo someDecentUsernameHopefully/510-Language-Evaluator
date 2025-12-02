@@ -1,4 +1,5 @@
 from Automata.automata import Automata
+from Automata.DataStructures.stack import Stack
 
 class PDA(Automata):
     def __init__(self, filename):
@@ -31,5 +32,19 @@ class PDA(Automata):
         F.close()
         if(tracker < 4):
             raise RuntimeError("States must be defined!")
+    def __str__(self):
+        toReturn = f"PUSHDOWN AUTOMATA\n{self.alphabet}\n{self.stackAlphabet}\n"
+        for state in self.states.values():
+            toReturn += str(state) + "\n"
+        return toReturn
     def Accept(self, _input):
-        return super().Accept(_input)
+        if not self.InputInAlpha(_input):
+            return (False, None)
+        # Setup
+        currentState = self.start
+        stack = Stack()
+        while True:
+            # Check if we are able to end in an accepting state
+            if len(_input) == 0 and stack.IsEmpty():
+                break
+        # If we end in an accepting state, 

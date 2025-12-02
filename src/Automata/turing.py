@@ -29,11 +29,12 @@ class TuringMachine(Automata):
                     # The format for a transition for turing automata is:
                     # [FROM] [CONSUMED_CHAR] [REPLACED] [DIRECTION] [TO]
                     raw = line.split(" ")
+                    origin = self.states[raw[0]]
                     dest = self.states[raw[4]]
                     for i in range(1,3):
                         raw[i] = None if raw[i] == "" else raw[i]
-                    T = TuringTransition(raw[1], raw[2], raw[3], dest)
-                    self.states[raw[0]].AddTransition(raw[1], T)
+                    T = TuringTransition(origin, raw[1], raw[2], raw[3], dest)
+                    origin.AddTransition(raw[1], T)
             tracker += 1
         F.close()
         if(tracker < 4):
@@ -41,7 +42,7 @@ class TuringMachine(Automata):
     def Accept(self, _input):
         # Check if the entire string is in the alphabet
         if not self.InputInAlpha(_input):
-            return None
+            return (False, None, None)
         # Since turing machines can loop infinitely, a maximum number of steps is used to force the machine to halt.
         # This scales with the input size.
         # Add a constant 16 to allow for the empty string to have some transitions
@@ -50,29 +51,31 @@ class TuringMachine(Automata):
         T = Tape(_input)
         # Keep track of the state
         currentState = self.start
+        # Keep track of the transitions
+        path = ""
         for i in range(maxSteps):
             # Check that the tape is in a valid state.
             # Realistically, this should never not be the case.
             if T.char is not None and T.char not in self.stackAlphabet:
                 del T
-                return None
+                return (False, None, None)
             # Find the appropriate transition, and go along it.
             if T.char not in currentState.transitions:
                 break
             trans = currentState.transitions[T.char]
             T = trans.AdjustTape(T)
             currentState = trans.to
-            #print(f"{T} - {currentState}")
+            path += str(trans) + "\n"
             # If we hit a halt state, exit this loop.
             if currentState.accepting:
                 break
         if currentState.accepting:
             toReturn = str(T)
             del T
-            return toReturn
+            return (True, path, toReturn)
         else:
             del T
-            return None
+            return (False, None, None)
     def __str__(self):
         toReturn = f"TURING MACHINE\n{self.alphabet}\n{self.stackAlphabet}\n"
         for state in self.states.values():
