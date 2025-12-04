@@ -2,6 +2,8 @@ from Automata.automata import Automata
 from Automata.Transitions.turingTransition import TuringTransition
 from Automata.DataStructures.tape import Tape
 
+debug = 0
+
 class TuringMachine(Automata):
     def __init__(self, filename):
         F = open(filename, "r")
@@ -30,13 +32,17 @@ class TuringMachine(Automata):
                     # Define each transition
                     # The format for a transition for turing automata is:
                     # [FROM] [CONSUMED_CHAR] [REPLACED] [DIRECTION] [TO]
-                    raw = line.split(" ")
-                    origin = self.states[raw[0]]
-                    dest = self.states[raw[4]]
-                    for i in range(1,3):
-                        raw[i] = None if raw[i] == "" else raw[i]
-                    T = TuringTransition(origin, raw[1], raw[2], raw[3], dest)
-                    origin.AddTransition(raw[1], T)
+                    try:
+                        raw = line.split(" ")
+                        origin = self.states[raw[0]]
+                        dest = self.states[raw[4]]
+                        for i in range(1,3):
+                            raw[i] = None if raw[i] == "" else raw[i]
+                        T = TuringTransition(origin, raw[1], raw[2], raw[3], dest)
+                        origin.AddTransition(raw[1], T)
+                    except IndexError as e:
+                        print(line)
+                        raise e
             tracker += 1
         F.close()
         if(tracker < 4):
@@ -64,11 +70,15 @@ class TuringMachine(Automata):
                 return (False, None, None)
             # Find the appropriate transition, and go along it.
             if T.char not in currentState.transitions:
+                if(debug):
+                    print(f"{T.char} not in transitions!")
                 break
             trans = currentState.transitions[T.char]
             T = trans.AdjustTape(T)
             currentState = trans.to
             path += str(trans) + "\n"
+            if (debug):
+                print(f"{str(T)} | {str(trans)}")
             # If we hit a halt state, exit this loop.
             if currentState.accepting:
                 break
