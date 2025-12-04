@@ -14,7 +14,8 @@ class State:
             raise RuntimeError("Non-determinism is not supported!")
         self.transitions[consume] = trans
     def __str__(self):
-        toReturn = f"{"+" if self.accepting else ""}{self.name}\n"
+        accepting = "+" if self.accepting else ""
+        toReturn = f"{accepting}{self.name}\n"
         for trans in self.transitions.values():
             toReturn += "\t" + str(trans) + "\n"
         return toReturn

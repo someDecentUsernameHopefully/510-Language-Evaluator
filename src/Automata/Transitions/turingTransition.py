@@ -15,4 +15,5 @@ class TuringTransition(Transition):
     def AdjustTape(self, tape):
         return tape.Progress(self.consumed, self.replace, self.dir)
     def __str__(self):
-        return f"{self._from.name} | {self.consumed}/{self.replace}, {"<-" if self.dir == LEFT else "->"} | {self.to.name}"
+        dirStr = "<-" if self.dir == LEFT else "->"
+        return f"{self._from.name} | {self.consumed}/{self.replace}, {dirStr} | {self.to.name}"
