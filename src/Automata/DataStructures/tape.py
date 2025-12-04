@@ -14,7 +14,7 @@ class Tape:
             self.char = None
         # Recursive case: create another tape and attach it to itself
         else:
-            self.char = string[0]
+            self.char = string[0] if string[0] != " " else None
             self.right = Tape(string[1:])
             self.right.left = self
     # Make sure that Tape can be deleted after it is no longer necessary
