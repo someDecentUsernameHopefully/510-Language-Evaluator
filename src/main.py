@@ -1,7 +1,6 @@
 from os import read
 import sys
 from Automata.regular import RegularAutomata
-from Automata.pda import PDA
 from Automata.turing import TuringMachine
 
 def main():
@@ -30,10 +29,10 @@ def main():
     match automataType:
         case "REG":
             automata = RegularAutomata(argv[1])
-        case "PDA":
-            automata = PDA(argv[1])
         case "TUR":
             automata = TuringMachine(argv[1])
+        case _:
+            print(f"Unsupported automata type {automataType}")
     #print("The machine has been formed. It is:")
     #print(str(automata))
     # Get the file of test strings
