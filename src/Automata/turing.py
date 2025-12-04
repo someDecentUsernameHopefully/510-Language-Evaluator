@@ -2,7 +2,7 @@ from Automata.automata import Automata
 from Automata.Transitions.turingTransition import TuringTransition
 from Automata.DataStructures.tape import Tape
 
-debug = 0
+debug = False
 
 class TuringMachine(Automata):
     def __init__(self, filename):

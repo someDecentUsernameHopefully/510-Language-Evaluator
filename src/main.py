@@ -3,6 +3,8 @@ import sys
 from Automata.regular import RegularAutomata
 from Automata.turing import TuringMachine
 
+showTransitions = True
+
 def main():
     # Verify that there are the correct number of arguments.
     argv = sys.argv
@@ -47,7 +49,8 @@ def main():
         output = automata.Accept(line)
         if(output[0]):
             print(f"{line} is recognized by the automata. {"The output is: " + output[2] if output[2] is not None else ""}")
-            print(output[1], end="")
+            if showTransitions:
+                print(output[1], end="")
         else:
             print(f"{line} is not recognized by the automata.")
     testStrings.close()
