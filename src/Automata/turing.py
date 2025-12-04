@@ -39,6 +39,7 @@ class TuringMachine(Automata):
         F.close()
         if(tracker < 4):
             raise RuntimeError("States must be defined!")
+        self.maxSteps = lambda steps : 16 * steps ** 2 + 16
     def Accept(self, _input):
         # Check if the entire string is in the alphabet
         if not self.InputInAlpha(_input):
@@ -46,7 +47,7 @@ class TuringMachine(Automata):
         # Since turing machines can loop infinitely, a maximum number of steps is used to force the machine to halt.
         # This scales with the input size.
         # Add a constant 16 to allow for the empty string to have some transitions
-        maxSteps = 16 * len(_input) ** 2 + 16
+        maxSteps = self.maxSteps(len(_input))
         # Generate the starting tape
         T = Tape(_input)
         # Keep track of the state
