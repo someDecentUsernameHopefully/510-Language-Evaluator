@@ -37,8 +37,10 @@ class Tape:
         while(t is not None):
             if (t.char is not None):
                 toReturn += t.char
+            else:
+                toReturn += " "
             t = t.right
-        return toReturn
+        return toReturn.strip(" ")
     """
         Progresses the tape to the next position
         Returns: The next tape's position
