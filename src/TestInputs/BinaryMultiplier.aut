@@ -1,0 +1,167 @@
+TUR
+# Language Alphabet
+1 0 *
+# Stack Alphabet
+X Y A B S E
+# List of states by name
+# V are the (V)erification states
+# F are the states used for (F)inding the least significant non-zero bit.
+# S are the states used for one (S)um operation.
+# SC are the states for the (S)um (C)leanup
+# C are the states used for (C)leanup
+# H is the (H)alt state
+V0 V1 V2 V3 V4 F0 F1 F2 F3 S0 S1 S2 S2.1 S3 S3.1 S3.2 S4 SC0 SC1 SC2 SC3 C0 C1 C2 C3 C4 C4.1 C4.2 C5 C5.1 C5.2 C6 H
+# List of accepting halt states, in my case I only have one.
+H
+# Verify the string takes the form X*Y
+# If it does, this machine should always halt.
+# I'm sure you could find some edge case involving spaces
+# But that's above my paygrade.
+V0 0 0 R V1
+V0 1 1 R V1
+V1 0 0 R V1
+V1 1 1 R V1
+V1 * * R V2
+V2 0 0 R V2
+V2 1 1 R V2
+V2   L V3
+V3 0 0 L V4
+V3 1 1 L V4
+V4 0 0 L V4
+V4 1 1 L V4
+V4 * * L F0
+# Find the least significant 1 bit in the first operand.
+F0 0 X R F1
+F0 X X L F0
+F0 1 X R S0
+# If we reach the left end of the tape, then we are done multiplying
+F0   R C0
+# Go to the end of the tape
+F1 0 0 R F1
+F1 1 1 R F1
+F1 * * R F1
+F1 X X R F1
+F1   R F2
+# Confirm one bit in the eventual output.
+F2 X X R F2
+F2 Y Y R F2
+F2  X L F3
+F2 0 X L F3
+F2 1 Y L F3
+F3 X X L F3
+F3 Y Y L F3
+F3 0 0 L F3
+F3 1 1 L F3
+F3   L F3
+# Then, we fetch another bit.
+F3 * * L F0
+# SUM
+S0 0 0 R S0
+S0 1 1 R S0
+S0 X X R S0
+S0 * * R S0
+S0   L S1
+S1 A A L S1
+S1 B B L S1
+S1 0 A R S2
+S1 1 B R S3
+S1 * * R SC0
+# Add a 0
+S2 A A R S2
+S2 B B R S2
+S2   R S2.1
+S2.1 X X R S2.1
+S2.1 Y Y R S2.1
+S2.1 A A R S2.1
+S2.1 B B R S2.1
+S2.1 0 A L S4
+S2.1 1 B L S4
+S2.1  A L S4
+# Add a 1
+S3 A A R S3
+S3 B B R S3
+S3   R S3.1
+S3.1 X X R S3.1
+S3.1 Y Y R S3.1
+S3.1 A A R S3.1
+S3.1 B B R S3.1
+S3.1 0 B L S4
+S3.1 1 A R S3.2
+S3.1  B L S4
+# Carrying a 1
+S3.2 0 1 L S4
+S3.2  1 L S4
+S3.2 1 0 R S3.2
+# Go back to first operand of sum
+S4 X X L S4
+S4 Y Y L S4
+S4 A A L S4
+S4 B B L S4
+S4 0 0 L S4
+S4 1 1 L S4
+S4   L S1
+# SUM CLEANUP
+SC0 A 0 R SC0
+SC0 B 1 R SC0
+SC0   R SC1
+SC1 X X R SC1
+SC1 Y Y R SC1
+SC1 A X R SC2
+SC1 B Y R SC2
+SC2 A 0 R SC2
+SC2 B 1 R SC2
+SC2 0 0 R SC2
+SC2 1 1 R SC2
+SC2   L SC3
+# Move the tape to before the * and go back to F
+SC3 0 0 L SC3
+SC3 1 1 L SC3
+SC3 X X L SC3
+SC3 Y Y L SC3
+SC3   L SC3
+SC3 * * L F0
+# CLEANUP
+C0 0  R C0
+C0 1  R C0
+C0 *  R C0
+C0 X  R C0
+C0  S R C1
+# At C1, we have the answer in reverse, but we need to reverse and format it.
+# Insert an end flag at the end of the string
+C1 0 0 R C1
+C1 1 1 R C1
+C1 X X R C1
+C1 Y Y R C1
+C1  E L C2
+# Go back to the start, reformatting everything along the way
+C2 X 0 L C2
+C2 Y 1 L C2
+C2 0 0 L C2
+C2 1 1 L C2
+C2 S S R C3
+# Copy everything in reverse.
+C3   R C3
+C3 0  L C4
+C3 1  L C5
+C3 E  L C6
+# Copy 0s
+C4   L C4
+C4 S S L C4.1
+C4.1 0 0 L C4.1
+C4.1 1 1 L C4.1
+C4.1  0 R C4.2
+C4.2 0 0 R C4.2
+C4.2 1 1 R C4.2
+C4.2 S S R C3
+# Copy 1s
+C5   L C5
+C5 S S L C5.1
+C5.1 0 0 L C5.1
+C5.1 1 1 L C5.1
+C5.1  1 R C5.2
+C5.2 0 0 R C5.2
+C5.2 1 1 R C5.2
+C5.2 S S R C3
+# Go back, remove the start flag, and end.
+C6   L C6
+C6 S  L H
