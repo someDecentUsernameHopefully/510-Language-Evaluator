@@ -1,0 +1,11 @@
+TUR
+1
+
+q0 q1 q2 H
+H
+q0 1 1 R q1
+q0   L H
+q1 1 1 R q2
+q1  1 R q2
+q2 1 1 R q0
+q2  1 R q0
