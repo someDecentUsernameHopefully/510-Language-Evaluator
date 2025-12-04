@@ -8,6 +8,8 @@ class TuringMachine(Automata):
         tracker = 0
         for line in F:
             line = line.strip("\n")
+            if(line[0] == "#" or len(line) == 0):
+                continue
             match tracker:
                 case 0:
                     # This is just the type of automata. We already know this.
