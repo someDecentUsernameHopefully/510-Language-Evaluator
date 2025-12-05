@@ -8,7 +8,10 @@ showTransitions = True
 def main():
     # Verify that there are the correct number of arguments.
     argv = sys.argv
-    if(len(argv) != 3):
+    humanFriendly = False
+    if(len(argv) == 4 and argv[3] == "-human"):
+        humanFriendly = True
+    elif(len(argv) != 3):
         print("Usage: ./main.py [MACHINE_FILE] [TEST_STRINGS]")
         sys.exit(1)
     # Assemble the automata
@@ -19,7 +22,7 @@ def main():
         f = open(argv[1], 'r')
         automataType = f.read(3).upper()
         f.close()
-        if automataType not in ("REG", "PDA", "TUR"):
+        if automataType not in ("REG", "TUR"):
             raise RuntimeError("Invalid machine type!")
     except RuntimeError as e:
         print(e)
@@ -49,11 +52,16 @@ def main():
         output = automata.Accept(line)
         if(output[0]):
             outputStr = "The output is: " + output[2] if output[2] is not None else ""
-            print(f"{line} is recognized by the automata. {outputStr}")
+            if humanFriendly:
+                print(f"{line} is accepted by the language. {outputStr}")
+            else:
+                print("accept")
             if showTransitions:
                 print(output[1], end="")
+        elif humanFriendly:
+            print(f"{line} is not accepted by the language.")
         else:
-            print(f"{line} is not recognized by the automata.")
+            print("reject")
     testStrings.close()
 
 main()
