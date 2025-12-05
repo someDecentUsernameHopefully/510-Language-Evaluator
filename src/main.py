@@ -49,11 +49,11 @@ def main():
         output = automata.Accept(line)
         if(output[0]):
             outputStr = "The output is: " + output[2] if output[2] is not None else ""
-            print(f"{line} is recognized by the automata. {outputStr}")
+            print("accept")
             if showTransitions:
                 print(output[1], end="")
         else:
-            print(f"{line} is not recognized by the automata.")
+            print("reject")
     testStrings.close()
 
 main()
