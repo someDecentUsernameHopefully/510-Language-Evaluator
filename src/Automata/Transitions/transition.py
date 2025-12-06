@@ -1,3 +1,4 @@
+# Trasition for DFAs/NFAs
 class Transition:
     def __init__(self, _from, consumed, to):
         self._from = _from

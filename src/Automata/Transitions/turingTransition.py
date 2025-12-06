@@ -1,6 +1,7 @@
 from Automata.Transitions.transition import Transition
 from Automata.DataStructures.tape import Tape, LEFT, RIGHT
 
+# Transition for Turing Machines
 class TuringTransition(Transition):
     def __init__(self, _from, consumed, replace, direction, to):
         super().__init__(_from, consumed, to)
@@ -13,6 +14,7 @@ class TuringTransition(Transition):
             case _:
                 raise ValueError("Invalid direction!")
     def AdjustTape(self, tape):
+        # Update the tape based on the consumed character, replaced character, and direction.
         return tape.Progress(self.consumed, self.replace, self.dir)
     def __str__(self):
         dirStr = "<-" if self.dir == LEFT else "->"

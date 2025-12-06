@@ -39,6 +39,7 @@ class RegularAutomata(Automata):
         while(len(_input) > 0):
             if _input[0] not in currentState.transitions:
                 return (False, None, None)
+            # Find the appropriate transition and go along it.
             trans = currentState.transitions[_input[0]]
             path += "\t" + str(trans) + "\n"
             currentState = trans.to
@@ -46,6 +47,7 @@ class RegularAutomata(Automata):
         return (currentState.accepting, path, None)
     def __str__(self):
         toReturn = f"REGULAR MACHINE\n{self.alphabet}\n"
+        # List all states
         for state in self.states.values():
             toReturn += str(state)
         return toReturn

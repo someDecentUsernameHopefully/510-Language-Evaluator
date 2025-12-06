@@ -2,9 +2,7 @@
 LEFT = 0
 RIGHT = 1
 
-"""
-    The tape, for use with Turing Machines
-"""
+# The tape, for use with Turing Machines
 class Tape:
     def __init__(self, string=None):
         self.left = None
@@ -20,6 +18,8 @@ class Tape:
     # Make sure that Tape can be deleted after it is no longer necessary
     # Deleting one tape segment cascades across the entire tape.
     def __del__(self):
+        # Deallocate the adjacent tapes.
+        # This will occur recursively
         if(self.left is not None):
             self.left.right = None
             del self.left

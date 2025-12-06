@@ -1,4 +1,5 @@
 # Normally I would document more, but this is just a stack. We all know what this does.
+# Also, I don't even think I used it at all.
 class Stack:
     def __init__(self):
         self.array = []

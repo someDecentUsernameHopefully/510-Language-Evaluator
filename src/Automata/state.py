@@ -4,6 +4,7 @@ class State:
         self.accepting = False
         self.transitions = {}
     def __del__(self):
+        # Free all stored transitions.
         keys = []
         for key in self.transitions.keys():
             keys.append(key)
@@ -16,6 +17,7 @@ class State:
     def __str__(self):
         accepting = "+" if self.accepting else ""
         toReturn = f"{accepting}{self.name}\n"
+        # List all stored transitions.
         for trans in self.transitions.values():
             toReturn += "\t" + str(trans) + "\n"
         return toReturn
